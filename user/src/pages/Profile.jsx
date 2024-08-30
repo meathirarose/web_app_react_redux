@@ -9,7 +9,15 @@ import {
 } from "firebase/storage";
 import { app } from "../firebase";
 import { useDispatch } from "react-redux";
-import { updateUserStart, updateUserSuccess, updateUserFailure } from "../redux/user/userSlice";
+import {
+  updateUserStart,
+  updateUserSuccess,
+  updateUserFailure,
+  deleteUserStart,
+  deleteUserSuccess, 
+  deleteUserFailure,
+} from "../redux/user/userSlice";
+
 
 const Profile = () => {
   const fileRef = useRef(null);
@@ -67,14 +75,14 @@ const Profile = () => {
     try {
       dispatch(updateUserStart());
       const res = await fetch(`/api/user/update/${currentUser._id}`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       });
       const data = await res.json();
-      if(data.success === false){
+      if (data.success === false) {
         dispatch(updateUserFailure(data));
         return;
       }
@@ -83,8 +91,34 @@ const Profile = () => {
     } catch (error) {
       dispatch(updateUserFailure(error));
     }
-  }
+  };
 
+  const handleDeleteAccount = async () => {
+    try {
+      dispatch(deleteUserStart());
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(deleteUserFailure(data));
+        return;
+      }
+      dispatch(deleteUserSuccess(data));
+    } catch (error) {
+      dispatch(deleteUserFailure(error));
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await fetch('/api/auth/signout');
+      dispatch(signOut())
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
   return (
     <div
       className="p-10
@@ -93,7 +127,10 @@ const Profile = () => {
     >
       <h1 className="text-3xl text-center font-bold my-3">Profile</h1>
 
-      <form onSubmit={handleFormSubmit} className="flex flex-col items-center gap-4">
+      <form
+        onSubmit={handleFormSubmit}
+        className="flex flex-col items-center gap-4"
+      >
         <input
           type="file"
           ref={fileRef}
@@ -149,19 +186,26 @@ const Profile = () => {
         />
 
         <button className="bg-sky-600 rounded-lg p-2 w-full hover:bg-sky-500 disabled:opacity-95 uppercase text-white">
-        {loading ? 'Loading...' : 'Update'}
+          {loading ? "Loading..." : "Update"}
         </button>
       </form>
       <div className="flex justify-between w-96 mt-3">
-        <span className="text-red-600 cursor-pointer text-sm font-semibold">
+        <span
+          onClick={handleDeleteAccount}
+          className="text-red-600 cursor-pointer text-sm font-semibold"
+        >
           Delete Account?
         </span>
-        <span className="text-red-600 cursor-pointer text-sm font-semibold">
+        <span onClick={handleSignOut} className="text-red-600 cursor-pointer text-sm font-semibold">
           Sign Out
         </span>
       </div>
-      <p className="text-red-600 mt-2 text-center">{error && "Something went wrong!"}</p>
-      <p className="text-green-600 mt-2 text-center">{updateSuccess && "User updated successfully!"}</p>
+      <p className="text-red-600 mt-2 text-center">
+        {error && "Something went wrong!"}
+      </p>
+      <p className="text-green-600 mt-2 text-center">
+        {updateSuccess && "User updated successfully!"}
+      </p>
     </div>
   );
 };
