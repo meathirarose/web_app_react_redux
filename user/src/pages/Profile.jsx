@@ -21,7 +21,9 @@ const Profile = () => {
   const { currentUser } = useSelector((state) => state.user);
 
   useEffect(() => {
-    if (image) handleImageUpload(image);
+    if (image) {
+      handleImageUpload(image);
+    }
   }, [image]);
 
   const handleImageUpload = async (image) => {
@@ -70,7 +72,7 @@ const Profile = () => {
           onChange={(e) => setImage(e.target.files[0])}
         />
         <img
-          src={currentUser.profilePicture}
+          src={ formData.profilePicture || currentUser.profilePicture}
           alt="Profile Picture"
           className="h-24 w-24 rounded-full object-cover my-2 cursor-pointer "
           onClick={() => fileRef.current.click()}
