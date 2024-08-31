@@ -6,10 +6,18 @@ import Profile from "./pages/Profile";
 import Header from "./components/Header";
 import Error from "./components/Error";
 import PrivateRoute from "./components/PrivateRoute";
+import { HOME_BACKGROUND_IMAGE_LINK } from "./utils/constants";
 
 const AppLayout = () => {
   return (
-    <div className="app">
+    <div
+      className="app min-h-screen bg-gray-100 text-gray-800 font-sans relative"
+      style={{
+        backgroundImage: `url(${HOME_BACKGROUND_IMAGE_LINK})`,
+        backgroundSize: "cover", 
+        backgroundPosition: "center", 
+      }}
+    >
       <Header />
       <Outlet />
     </div>
