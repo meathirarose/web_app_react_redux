@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { BACKGROUND_IMAGE_LINK } from "../utils/constants";
+import { BACKGROUND_IMAGE_LINK } from "../../utils/constants";
 
 const SignUp = () => {
 

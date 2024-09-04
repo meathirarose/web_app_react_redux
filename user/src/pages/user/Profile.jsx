@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { BACKGROUND_IMAGE_HEADER_LINK } from "../utils/constants";
+import { BACKGROUND_IMAGE_HEADER_LINK } from "../../utils/constants";
 import { useSelector } from "react-redux";
 import {
   getDownloadURL,
@@ -7,7 +7,7 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import { app } from "../firebase";
+import { app } from "../../firebase";
 import { useDispatch } from "react-redux";
 import {
   updateUserStart,
@@ -17,7 +17,7 @@ import {
   deleteUserSuccess,
   deleteUserFailure,
   signOut,
-} from "../redux/user/userSlice";
+} from "../../redux/user/userSlice";
 
 const Profile = () => {
   const fileRef = useRef(null);

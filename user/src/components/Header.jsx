@@ -1,14 +1,22 @@
 import { Link } from "react-router-dom";
 import { LOGO_LINK } from "../utils/constants";
 import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 
 const Header = () => {
+  const location = useLocation();
+
   const { currentUser } = useSelector((state) => state.user);
+  const isAdminPage = location.pathname.startsWith("/admin");
 
   return (
-    <div className="bg-slate-100 shadow-md">
+    <div
+      className={`${
+        isAdminPage ? "text-white" : " text-black"
+      } shadow-2xl`}
+    >
       <div className="flex justify-between m-auto items-center p-7 max-w-6xl">
-        <img src={LOGO_LINK} alt="logo-image" className="w-16" />
+        <img src={LOGO_LINK} alt="logo-image" className="w-16 cursor-pointer" />
         <ul className="flex gap-4">
           <li className="px-2 mx-4">
             <Link to="/">Home</Link>

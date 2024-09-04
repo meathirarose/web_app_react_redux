@@ -5,3 +5,5 @@ export const BACKGROUND_IMAGE_LINK = "https://images.pexels.com/photos/1103970/p
 export const BACKGROUND_IMAGE_HEADER_LINK = "https://media.istockphoto.com/id/1281736074/vector/abstract-geometric-pattern-background.jpg?s=612x612&w=0&k=20&c=rTHAuJPGgbaGZCDh6PAoVkJr3mTvn5WppwDHAPfNgoU=";
 
 export const HOME_BACKGROUND_IMAGE_LINK = "https://img.freepik.com/premium-vector/grey-geometric-technology-background_115579-194.jpg";
+
+export const ADMIN_BACKGROUND_IMAGE_LINK = "https://wallpapercave.com/wp/wp2508307.jpg";

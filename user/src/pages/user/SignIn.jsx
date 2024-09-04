@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { BACKGROUND_IMAGE_LINK } from "../utils/constants";
-import { signInStart, signInSuccess, signInFailure } from "../redux/user/userSlice";
+import { BACKGROUND_IMAGE_LINK } from "../../utils/constants";
+import { signInStart, signInSuccess, signInFailure } from "../../redux/user/userSlice";
 import { useDispatch, useSelector } from 'react-redux';
 
 const SignIn = () => {
@@ -45,7 +45,7 @@ const SignIn = () => {
   }
 
   return (
-    <div className="p-12 max-w-lg mx-auto my-10 bg-slate-50 rounded-lg shadow-md bg-cover bg-center" 
+    <div className="p-12 max-w-lg mx-auto my-10  rounded-lg shadow-md bg-cover bg-center" 
       style={{ backgroundImage: `url(${BACKGROUND_IMAGE_LINK})` }}>
       <h1 className="text-3xl text-center font-bold my-7">Sign In</h1>
 
