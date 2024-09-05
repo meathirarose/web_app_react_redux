@@ -52,7 +52,7 @@ const AdminSignIn = () => {
 
   return (
     <div className="p-12 max-w-lg mx-auto my-10 rounded-lg shadow-2xl bg-cover bg-center">
-      <h1 className="text-3xl text-center font-bold my-7">Admin Sign In</h1>
+      <h1 className="text-3xl text-center font-bold my-7">Admin SignIn</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
           type="email"

@@ -1,7 +1,22 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { signOut } from "../../redux/admin/adminSlice";
+import { useNavigate } from "react-router-dom";
 
 const AdminProfile = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  
   const { currentAdmin } = useSelector((state) => state.admin);
+
+  const handleSignOut = async () => {
+    try {
+      await fetch("/api/admin/signout");
+      dispatch(signOut());
+      navigate("/admin/sign-in"); 
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="p-10 max-w-lg mx-auto my-20 rounded-lg shadow-2xl bg-cover bg-center flex flex-col items-center gap-6">
@@ -25,7 +40,7 @@ const AdminProfile = () => {
         />
       </form>
       <div>
-        <span className="text-red-600 cursor-pointer text-sm font-semibold">
+        <span onClick={handleSignOut} className="text-red-600 cursor-pointer text-sm font-semibold">
           Sign Out
         </span>
       </div>
