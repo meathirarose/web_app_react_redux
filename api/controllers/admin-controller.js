@@ -7,17 +7,17 @@ export const signin = async (req, res, next) => {
     const {email, password} = req.body;
 
     try {
-        const validUser = await User.findOne({email});
-        if(!validUser) return next(errorHandler(401, 'User not found'));
+        const admin = await User.findOne({email});
+        if(!admin) return next(errorHandler(401, 'User not found'));
 
-        const validPassword = bcryptjs.compareSync(password, validPassword.password);
+        const validPassword = bcryptjs.compareSync(password, admin.password);
         if(!validPassword) return next(errorHandler(401, 'Invalid credentials'));
 
-        if(validUser.isAdmin !== 1)
+        if(admin.isAdmin !== 1)
             return next(errorHandler(403, 'Access denied! You are not an admin.!'));
 
-        const token = jwt.sign({id: validUser._id, isAdmin: validUser.isAdmin}, process.env.JWT_SECRET);
-        const {password: hashedPassword, ...rest} = validUser._doc;
+        const token = jwt.sign({id: admin._id, isAdmin: admin.isAdmin}, process.env.JWT_SECRET);
+        const {password: hashedPassword, ...rest} = admin._doc;
 
         const expiryDate = new Date(Date.now() + 3600000);
         res

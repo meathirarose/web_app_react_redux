@@ -5,7 +5,7 @@ import { signin } from '../controllers/admin-controller.js';
 
 const router = express.Router();
 
-router.get('/signin', verifyAdmin, signin);
+router.post('/sign-in', signin);
 
 export default router;
 

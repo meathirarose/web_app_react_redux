@@ -10,6 +10,7 @@ import Error from "./components/Error";
 import PrivateRoute from "./components/PrivateRoute";
 import { useLocation } from "react-router-dom";
 import { HOME_BACKGROUND_IMAGE_LINK, ADMIN_BACKGROUND_IMAGE_LINK } from "./utils/constants";
+import AdminProfile from "./pages/admin/AdminProfile";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -65,6 +66,10 @@ const appRouter = createBrowserRouter([
         path: "/admin/sign-in",
         element: <AdminSignIn />, 
       },
+      {
+        path: "/admin/profile",
+        element: <AdminProfile />
+      }
     ],
     errorElement: <Error />,
   },
