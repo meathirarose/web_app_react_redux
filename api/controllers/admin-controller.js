@@ -30,6 +30,15 @@ export const signin = async (req, res, next) => {
     }
 }
 
+export const getUsers = async (req, res, next) => {
+    try {
+        const users = await User.find();
+        res.status(200).json(users);
+    } catch (error) {
+        next(error)
+    }
+}
+
 export const signout = (req, res) => {
     res.clearCookie('access_token').status(200).json('Signout success!');
   };

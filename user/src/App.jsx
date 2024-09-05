@@ -4,13 +4,15 @@ import SignIn from "./pages/user/SignIn";
 import SignUp from "./pages/user/SignUp";
 import Profile from "./pages/user/Profile";
 import AdminSignIn from './pages/admin/AdminSignIn';
-import AdminHome from './pages/admin/AdminHome';
+import AdminHome from "./pages/admin/adminHome";
 import Header from "./components/Header";
 import Error from "./components/Error";
 import PrivateRoute from "./components/PrivateRoute";
+import PrivateAdminRoute from "./components/PrivateAdminRoute";
 import { useLocation } from "react-router-dom";
 import { HOME_BACKGROUND_IMAGE_LINK, ADMIN_BACKGROUND_IMAGE_LINK } from "./utils/constants";
 import AdminProfile from "./pages/admin/AdminProfile";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -69,7 +71,13 @@ const appRouter = createBrowserRouter([
       {
         path: "/admin/profile",
         element: <AdminProfile />
-      }
+      },
+      {
+        path:"/admin/dashboard",
+        element: <PrivateAdminRoute isAdmin={true}>
+          <AdminDashboard />
+        </PrivateAdminRoute>
+      },
     ],
     errorElement: <Error />,
   },
