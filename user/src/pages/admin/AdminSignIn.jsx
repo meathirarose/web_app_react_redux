@@ -1,12 +1,11 @@
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import {
   signInStart,
   signInSuccess,
   signInFailure,
   resetError,
 } from "../../redux/admin/adminSlice";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const AdminSignIn = () => {
@@ -16,16 +15,14 @@ const AdminSignIn = () => {
 
   const { loading, error } = useSelector((state) => state.admin);
 
-  useEffect(()=>{
-    dispatch(resetError())
-  }, [dispatch])
+  useEffect(() => {
+    dispatch(resetError());
+  }, [dispatch]);
 
   const handleChange = (e) => {
-
-    if(error){
+    if (error) {
       dispatch(resetError());
     }
-
     setFormData({
       ...formData,
       [e.target.id]: e.target.value,
@@ -44,7 +41,6 @@ const AdminSignIn = () => {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      console.log(data);
       if (data.success === false) {
         dispatch(signInFailure(data));
         return;
@@ -91,7 +87,7 @@ const AdminSignIn = () => {
         </button>
       </form>
       <p className="text-red-600 mt-2 text-center">
-        {error ? error.message || error || "Something went wrong!" : ""}
+        {error ? error.message || "Something went wrong!" : ""}
       </p>
     </div>
   );
