@@ -1,10 +1,21 @@
 import { useEffect, useState } from "react";
 import { FaEdit, FaPlus, FaTrashAlt } from "react-icons/fa";
+import {
+  deleteUserStart,
+  deleteUserSuccess,
+  deleteUserFailure,
+} from "../../redux/admin/adminSlice";
+import { useDispatch } from "react-redux";
+
 
 const AdminDashboard = () => {
+
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const dispatch = useDispatch();
+
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -36,6 +47,26 @@ const AdminDashboard = () => {
     // user handle
   };
 
+  const handleDeleteUser = async (userId) =>{
+    try {
+      dispatch(deleteUserStart());
+      const res = await fetch(`/api/admin/deleteUser/${userId}`,{
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      });
+      const data = await res.json();
+      if(data.success === false){
+        dispatch(deleteUserFailure(data));
+        return;
+      }
+      dispatch(deleteUserSuccess(data));
+    } catch (error) {
+      dispatch(deleteUserFailure(error))
+    }
+  }
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -51,13 +82,12 @@ const AdminDashboard = () => {
           Admin Dashboard - User List
         </h1>
         <div className="flex justify-end">
-
-        <button
-          onClick={handleAddUser}
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white my-3 py-2 px-4 rounded-lg transition-colors"
-        >
-          <FaPlus /> Add New User
-        </button>
+          <button
+            onClick={handleAddUser}
+            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white my-3 py-2 px-4 rounded-lg transition-colors"
+          >
+            <FaPlus /> Add New User
+          </button>
         </div>
         {users.length > 0 ? (
           <table className="min-w-full bg-gray-900 text-white rounded-lg overflow-hidden">
@@ -81,7 +111,7 @@ const AdminDashboard = () => {
                   </td>
                   <td className="border-t border-gray-700 py-3 px-6">
                     <img
-                      src={user.profilePicture} 
+                      src={user.profilePicture}
                       alt={user.username}
                       className="w-10 h-10 rounded-full"
                     />
@@ -96,7 +126,10 @@ const AdminDashboard = () => {
                     <button className="text-blue-400 hover:text-blue-300">
                       <FaEdit />
                     </button>
-                    <button className="text-red-400 hover:text-red-300">
+                    <button
+                      onClick={() => handleDeleteUser(user._id)}
+                      className="text-red-400 hover:text-red-300"
+                    >
                       <FaTrashAlt />
                     </button>
                   </td>

@@ -4,6 +4,7 @@ const initialState = {
   currentAdmin: null,
   loading: false,
   error: false,
+  users: []
 };
 
 const adminSlice = createSlice({
@@ -30,6 +31,18 @@ const adminSlice = createSlice({
     resetError: (state) => {
       state.error = null;
     },
+    deleteUserStart: (state) => {
+      state.loading = true;
+    },
+    deleteUserSuccess: (state, action) => {
+      state.users = state.users.filter(user => user.id !== action.payload);
+      state.loading = false;
+      state.error = false;
+    },
+    deleteUserFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    }
   },
 });
 
@@ -39,6 +52,9 @@ export const {
   signInFailure,
   signOut,
   resetError,
+  deleteUserStart,
+  deleteUserSuccess,
+  deleteUserFailure
 } = adminSlice.actions;
 
 export default adminSlice.reducer;
