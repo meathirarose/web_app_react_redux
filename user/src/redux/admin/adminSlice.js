@@ -4,7 +4,7 @@ const initialState = {
   currentAdmin: null,
   loading: false,
   error: false,
-  users: [],
+  users: [], 
   updateSuccess: false,
 };
 
@@ -38,7 +38,7 @@ const adminSlice = createSlice({
     },
     fetchUserDataSuccess: (state, action) => {
       state.loading = false;
-      state.users = action.payload;
+      state.users = Array.isArray(action.payload) ? action.payload : []; 
       state.error = null;
     },
     fetchUserDataFailure: (state, action) => {
@@ -68,7 +68,9 @@ const adminSlice = createSlice({
       state.loading = true;
     },
     deleteUserSuccess: (state, action) => {
-      state.users = state.users.filter(user => user.id !== action.payload);
+      if (Array.isArray(state.users)) {
+        state.users = state.users.filter(user => user._id !== action.payload);
+      } 
       state.loading = false;
       state.error = false;
     },

@@ -92,14 +92,18 @@ export const editUserData = async (req, res, next) => {
 
 export const deleteUser = async (req, res, next) => {
     const userId = req.params.id;
+    if(!req.params.id){
+        return next(errorHandler(401, "Internal error. User not found."));
+    }
 
     try {
         await User.findByIdAndDelete(userId);
-        res.status(200).json("User deleted successfully.!")
+        res.status(200).json("User has been deleted...")
     } catch (error) {
         next(error);
     }
 }
+
 
 // admin signout
 

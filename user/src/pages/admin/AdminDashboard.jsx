@@ -7,6 +7,7 @@ import {
 } from "../../redux/admin/adminSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 
 const AdminDashboard = () => {
@@ -43,7 +44,7 @@ const AdminDashboard = () => {
     };
 
     fetchUsers();
-  }, []);
+  }, [dispatch, users]);
 
   const handleAddUser = () => {
     navigate('/admin/add-new-user');
@@ -53,25 +54,38 @@ const AdminDashboard = () => {
     navigate(`/admin/edit-user/${userId}`)
   }
 
-  const handleDeleteUser = async (userId) =>{
+  const handleDeleteUser = async (userId) => {
+    const confirmed = window.confirm("Are you sure you want to delete this user?");
+    if (!confirmed) return;
+  
     try {
       dispatch(deleteUserStart());
-      const res = await fetch(`/api/admin/deleteUser/${userId}`,{
+  
+      const res = await fetch(`/api/admin/deleteUser/${userId}`, {
         method: 'DELETE',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
       });
-      const data = await res.json();
-      if(data.success === false){
-        dispatch(deleteUserFailure(data));
+  
+     if (!res.ok) {
+        const errorData = await res.json();
+        dispatch(deleteUserFailure(errorData));
+        toast.error("Failed to delete user: " + (errorData.message || 'Unknown error'));
         return;
       }
-      dispatch(deleteUserSuccess(data));
+  
+      const data = await res.json();
+      console.log("data is coming ----", data);
+  
+      dispatch(deleteUserSuccess(userId));
+      toast.success("User deleted successfully");
     } catch (error) {
-      dispatch(deleteUserFailure(error))
+      console.error("Error occurred while deleting user:", error);
+      dispatch(deleteUserFailure(error));
+      toast.error("An error occurred while deleting the user");
     }
-  }
+  };
 
   if (loading) {
     return <div>Loading...</div>;
