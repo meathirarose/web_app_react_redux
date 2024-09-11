@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   updateUserFailure,
   updateUserStart,
@@ -16,10 +16,12 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
+import { toast } from 'react-toastify'; 
 
 const AdminEditUser = () => {
   const { userId } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -28,7 +30,6 @@ const AdminEditUser = () => {
   const [image, setImage] = useState(undefined);
   const [progress, setProgress] = useState(0);
   const [imageError, setImageError] = useState(null);
-  const [updateSuccess, setUpdateSuccess] = useState(false);
 
   useEffect(() => {
     dispatch(fetchUserDataStart());
@@ -47,6 +48,7 @@ const AdminEditUser = () => {
       } catch (error) {
         setError(error.message);
         dispatch(fetchUserDataFailure(error.message));
+        toast.error(`Error: ${error.message}`); 
       } finally {
         setLoading(false);
       }
@@ -72,6 +74,7 @@ const AdminEditUser = () => {
           (error) => {
             setImageError(true);
             console.error("Upload failed:", error);
+            toast.error(`Image upload failed: ${error.message}`); 
           },
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
@@ -106,12 +109,17 @@ const AdminEditUser = () => {
       const result = await res.json();
       if (result.success === false) {
         dispatch(updateUserFailure(result));
+        toast.error(`Update failed: ${result.message}`); 
         return;
       }
+      console.log(result, "reawrads");
+      
       dispatch(updateUserSuccess(result));
-      setUpdateSuccess(true);
+      toast.success("User updated successfully!"); 
+      navigate('/admin/dashboard');
     } catch (error) {
       dispatch(updateUserFailure(error.message));
+      toast.error(`Update failed: ${error.message}`);
     }
   };
 
@@ -121,6 +129,7 @@ const AdminEditUser = () => {
   return (
     <div className="p-10 max-w-lg mx-auto my-8 rounded-lg shadow-2xl bg-cover bg-center flex flex-col items-center">
       <h1 className="text-3xl text-center font-bold my-3">Edit User</h1>
+      
       <form
         onSubmit={handleFormSubmit}
         className="flex flex-col items-center gap-4"
@@ -176,12 +185,7 @@ const AdminEditUser = () => {
           Update
         </button>
       </form>
-      <p className="text-red-600 mt-2 text-center">
-        {error && "Something went wrong!"}
-      </p>
-      <p className="text-green-600 mt-2 text-center">
-        {updateSuccess && "User updated successfully!"}
-      </p>
+
     </div>
   );
 };

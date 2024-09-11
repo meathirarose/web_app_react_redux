@@ -15,6 +15,8 @@ import AdminProfile from "./pages/admin/AdminProfile";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminEditUser from "./pages/admin/AdminEditUser";
 import AdminAddNewUser from "./pages/admin/AdminAddNewUser";
+import { ToastContainer } from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css';
 
 const AppLayout = () => {
   const location = useLocation();
@@ -32,6 +34,7 @@ const AppLayout = () => {
       }}
     >
       <Header />
+      <ToastContainer />
       <Outlet />
     </div>
   );

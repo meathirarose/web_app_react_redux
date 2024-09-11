@@ -50,9 +50,11 @@ const adminSlice = createSlice({
       state.updateSuccess = false;
     },
     updateUserSuccess: (state, action) => {
-      state.users = state.users.map(user =>
-        user.id === action.payload.id ? action.payload : user
-      );
+      if (Array.isArray(state.users)) {
+        state.users = state.users.map(user =>
+          user.id === action.payload.id ? action.payload : user
+        );
+      }
       state.loading = false;
       state.error = false;
       state.updateSuccess = true;
