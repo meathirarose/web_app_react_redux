@@ -14,7 +14,7 @@ import { HOME_BACKGROUND_IMAGE_LINK, ADMIN_BACKGROUND_IMAGE_LINK } from "./utils
 import AdminProfile from "./pages/admin/AdminProfile";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminEditUser from "./pages/admin/AdminEditUser";
-import AdminAddNewUser from "./pages/admin/AdminAddNewUser";
+import AdminAddUser from "./pages/admin/AdminAddUser";
 import { ToastContainer } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -89,7 +89,7 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/admin/add-new-user",
-        element: <AdminAddNewUser />
+        element: <AdminAddUser />
       },
     ],
     errorElement: <Error />,

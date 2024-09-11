@@ -99,7 +99,7 @@ const AdminEditUser = () => {
     dispatch(updateUserStart());
     try {
       const res = await fetch(`/api/admin/updateUser/${userId}`, {
-        method: "POST",
+        method: "PUT",
         headers: { 
           "Content-Type": "application/json" 
         },
@@ -112,8 +112,7 @@ const AdminEditUser = () => {
         toast.error(`Update failed: ${result.message}`); 
         return;
       }
-      console.log(result, "reawrads");
-      
+            
       dispatch(updateUserSuccess(result));
       toast.success("User updated successfully!"); 
       navigate('/admin/dashboard');

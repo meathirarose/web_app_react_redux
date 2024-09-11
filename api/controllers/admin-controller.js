@@ -88,6 +88,40 @@ export const editUserData = async (req, res, next) => {
     }
 }
 
+// add new user
+
+export const addNewUser = async (req, res, next) => {
+    const {username, email, password, profilePicture} = req.body;
+    if (!username || !email || !password || !profilePicture) {
+        return res.status(400).json({success: false, message: 'All fields are required' });
+    }
+
+    if (!/^[\w-.]+@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(email)) {
+        return res.status(400).json({ success: false, message: 'Invalid email format' });
+    }
+
+    try {
+
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+          return res.status(400).json({ success: false, message: 'User already exists' });
+        }
+
+        const hashedPassword = bcryptjs.hashSync(password, 10);
+        const newUser = new User({
+            username,
+            email,
+            password: hashedPassword,
+            profilePicture
+        });
+        await newUser.save();
+        res.status(201).json({ success: true, message: 'User added successfully' });
+    } catch (error) {
+        next(error);
+        res.status(500).json({ success: false, message: 'Error adding user' });
+    }
+}
+
 // delete user from the admin side
 
 export const deleteUser = async (req, res, next) => {
