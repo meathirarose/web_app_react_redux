@@ -2,18 +2,15 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { app } from "../../firebase";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { toast } from 'react-toastify';
 
 const AdminAddNewUser = () => {
   const fileRef = useRef(null);
   const [image, setImage] = useState(undefined);
   const [progress, setProgress] = useState(0);
-  const [imageError, setImageError] = useState(null);
   const [formData, setFormData] = useState({});
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
   const navigate = useNavigate();
 
-  
   useEffect(() => {
     if (image) {
       const handleImageUpload = async () => {
@@ -30,7 +27,7 @@ const AdminAddNewUser = () => {
             setProgress(Math.round(progress));
           },
           (error) => {
-            setImageError(true);
+            toast.error("Error uploading image");
             console.error("Upload failed:", error);
           },
           () => {
@@ -39,6 +36,7 @@ const AdminAddNewUser = () => {
                 ...prevData,
                 profilePicture: downloadURL,
               }));
+              toast.success("Image uploaded successfully");
             });
           }
         );
@@ -46,7 +44,7 @@ const AdminAddNewUser = () => {
       handleImageUpload();
     }
   }, [image]);
-  
+
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
@@ -63,13 +61,14 @@ const AdminAddNewUser = () => {
       });
       const data = await res.json();
       if (data.success) {
-        setSuccess(data.message);
+        toast.success(data.message);
         navigate('/admin/dashboard');
       } else {
-        setError(data.message);
+        toast.error(data.message);
       }
     } catch (err) {
-      setError('Error adding user', err);
+      toast.error('Error adding user');
+      console.error('Error adding user:', err);
     }
   };
 
@@ -91,15 +90,9 @@ const AdminAddNewUser = () => {
           onClick={() => fileRef.current.click()}
         />
         <p className="text-sm self-center">
-          {imageError ? (
-            <span className="text-red-700">Error uploading image</span>
-          ) : progress > 0 && progress < 100 ? (
+          {progress > 0 && progress < 100 ? (
             <span className="text-slate-700">{`Uploading ${progress}% done.`}</span>
-          ) : progress === 100 ? (
-            <span className="text-green-700">Image uploaded successfully</span>
-          ) : (
-            ""
-          )}
+          ) : null}
         </p>
         <input
           type="text"
@@ -126,8 +119,6 @@ const AdminAddNewUser = () => {
           Add
         </button>
       </form>
-      <p className="text-red-600 mt-2 text-center">{error}</p>
-      <p className="text-green-600 mt-2 text-center">{success}</p>
     </div>
   );
 };

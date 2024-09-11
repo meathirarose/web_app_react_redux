@@ -111,8 +111,7 @@ const AdminEditUser = () => {
         dispatch(updateUserFailure(result));
         toast.error(`Update failed: ${result.message}`); 
         return;
-      }
-            
+      }      
       dispatch(updateUserSuccess(result));
       toast.success("User updated successfully!"); 
       navigate('/admin/dashboard');
