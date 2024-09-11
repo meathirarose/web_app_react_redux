@@ -4,7 +4,8 @@ const initialState = {
   currentAdmin: null,
   loading: false,
   error: false,
-  users: []
+  users: [],
+  updateSuccess: false,
 };
 
 const adminSlice = createSlice({
@@ -31,6 +32,36 @@ const adminSlice = createSlice({
     resetError: (state) => {
       state.error = null;
     },
+    fetchUserDataStart: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    fetchUserDataSuccess: (state, action) => {
+      state.loading = false;
+      state.users = action.payload;
+      state.error = null;
+    },
+    fetchUserDataFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload; 
+    },
+    updateUserStart: (state) => {
+      state.loading = true;
+      state.updateSuccess = false;
+    },
+    updateUserSuccess: (state, action) => {
+      state.users = state.users.map(user =>
+        user.id === action.payload.id ? action.payload : user
+      );
+      state.loading = false;
+      state.error = false;
+      state.updateSuccess = true;
+    },
+    updateUserFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+      state.updateSuccess = false;
+    },
     deleteUserStart: (state) => {
       state.loading = true;
     },
@@ -52,6 +83,12 @@ export const {
   signInFailure,
   signOut,
   resetError,
+  fetchUserDataStart,
+  fetchUserDataSuccess, 
+  fetchUserDataFailure,
+  updateUserStart, 
+  updateUserSuccess, 
+  updateUserFailure,
   deleteUserStart,
   deleteUserSuccess,
   deleteUserFailure

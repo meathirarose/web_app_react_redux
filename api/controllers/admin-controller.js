@@ -3,6 +3,8 @@ import bcryptjs from "bcryptjs";
 import { errorHandler } from "../utils/error.js";
 import jwt from "jsonwebtoken";
 
+//admin sign in
+
 export const signin = async (req, res, next) => {
     const {email, password} = req.body;
 
@@ -30,6 +32,8 @@ export const signin = async (req, res, next) => {
     }
 }
 
+// Retrieving user information in the admin dashboard.
+
 export const getUsers = async (req, res, next) => {
     try {
         const users = await User.find({isAdmin: 0});
@@ -38,6 +42,8 @@ export const getUsers = async (req, res, next) => {
         next(error)
     }
 }
+
+// Fetching user data based on the user ID
 
 export const fetchUserData = async (req, res, next) => {
     const userId = req.params.id;
@@ -50,6 +56,40 @@ export const fetchUserData = async (req, res, next) => {
     }
 }
 
+// Editing user data from the admin side
+
+export const editUserData = async (req, res, next) => {
+
+    if(!req.params.id)
+        return next(errorHandler(401, "Internal error. User not found."));
+    
+    if(req.body.password)
+        req.body.password = bcryptjs.hashSync(req.body.password, 10);
+    
+
+    try {
+        const updateUser = await User.findByIdAndUpdate(
+            req.params.id, 
+            {
+                $set: {
+                    username: req.body.username, 
+                    email: req.body.email,
+                    password: req.body.password,
+                    profilePicture: req.body.profilePicture
+                }
+            },{new: true}
+        )
+
+        const {password, ...rest} = updateUser._doc;
+        res.status(200).json(rest);
+
+    } catch (error) {
+        next(error)   
+    }
+}
+
+// delete user from the admin side
+
 export const deleteUser = async (req, res, next) => {
     const userId = req.params.id;
 
@@ -60,6 +100,8 @@ export const deleteUser = async (req, res, next) => {
         next(error);
     }
 }
+
+// admin signout
 
 export const signout = (req, res) => {
     res.clearCookie('access_token').status(200).json('Signout success!');
