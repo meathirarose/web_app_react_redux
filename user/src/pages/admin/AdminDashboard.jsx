@@ -6,6 +6,7 @@ import {
   deleteUserFailure,
 } from "../../redux/admin/adminSlice";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 
 const AdminDashboard = () => {
@@ -16,6 +17,7 @@ const AdminDashboard = () => {
 
   const dispatch = useDispatch();
 
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -44,8 +46,12 @@ const AdminDashboard = () => {
   }, []);
 
   const handleAddUser = () => {
-    // user handle
+    navigate('/admin/add-new-user');
   };
+
+  const handleEditUser = (userId) => {
+    navigate(`/admin/edit-user/${userId}`)
+  }
 
   const handleDeleteUser = async (userId) =>{
     try {
@@ -123,7 +129,7 @@ const AdminDashboard = () => {
                     {user.email}
                   </td>
                   <td className="border-t border-gray-700 py-3 px-6 flex justify-center gap-2">
-                    <button className="text-blue-400 hover:text-blue-300">
+                    <button onClick={() => handleEditUser(user._id)} className="text-blue-400 hover:text-blue-300">
                       <FaEdit />
                     </button>
                     <button

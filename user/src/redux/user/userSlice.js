@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   currentUser: null,
+  users: [],
   loading: false,
   error: false,
 };
@@ -53,6 +54,8 @@ const userSlice = createSlice({
     },
   },
 });
+
+
 
 export const {
   signInStart,

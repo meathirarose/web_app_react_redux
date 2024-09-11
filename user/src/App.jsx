@@ -13,6 +13,8 @@ import { useLocation } from "react-router-dom";
 import { HOME_BACKGROUND_IMAGE_LINK, ADMIN_BACKGROUND_IMAGE_LINK } from "./utils/constants";
 import AdminProfile from "./pages/admin/AdminProfile";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminEditUser from "./pages/admin/AdminEditUser";
+import AdminAddNewUser from "./pages/admin/AdminAddNewUser";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -77,6 +79,14 @@ const appRouter = createBrowserRouter([
         element: <PrivateAdminRoute isAdmin={true}>
           <AdminDashboard />
         </PrivateAdminRoute>
+      },
+      {
+        path: "/admin/edit-user/:userId",
+        element: <AdminEditUser />
+      },
+      {
+        path: "/admin/add-new-user",
+        element: <AdminAddNewUser />
       },
     ],
     errorElement: <Error />,

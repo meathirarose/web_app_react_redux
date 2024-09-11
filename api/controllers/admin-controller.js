@@ -39,6 +39,17 @@ export const getUsers = async (req, res, next) => {
     }
 }
 
+export const fetchUserData = async (req, res, next) => {
+    const userId = req.params.id;
+    
+    try {
+        const userData = await User.findById({_id: userId});
+        res.status(200).json(userData);
+    } catch (error) {
+        next(error)
+    }
+}
+
 export const deleteUser = async (req, res, next) => {
     const userId = req.params.id;
 
