@@ -20,6 +20,11 @@ const AdminDashboard = () => {
 
   const navigate = useNavigate();
 
+  // const expensive = useMemo(()=>{
+  //   console.log("use memo");
+  //   return 2*2;
+  // },[])
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -81,7 +86,6 @@ const AdminDashboard = () => {
       dispatch(deleteUserSuccess(userId));
       toast.success("User deleted successfully");
     } catch (error) {
-      console.error("Error occurred while deleting user:", error);
       dispatch(deleteUserFailure(error));
       toast.error("An error occurred while deleting the user");
     }

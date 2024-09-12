@@ -22,6 +22,7 @@ const AdminEditUser = () => {
   const { userId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

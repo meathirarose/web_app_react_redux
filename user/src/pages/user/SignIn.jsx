@@ -3,23 +3,20 @@ import { Link, useNavigate } from "react-router-dom";
 import { BACKGROUND_IMAGE_LINK } from "../../utils/constants";
 import { signInStart, signInSuccess, signInFailure } from "../../redux/user/userSlice";
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 const SignIn = () => {
-
   const [formData, setFormData] = useState({});
-
-  const {loading, error} = useSelector((state) => state.user);
-
+  const { loading } = useSelector((state) => state.user);
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
 
   const handleInputChange = (e) => {
-      setFormData({
-        ...formData, 
-        [e.target.id] : e.target.value
-      })
-  }
+    setFormData({
+      ...formData,
+      [e.target.id]: e.target.value
+    });
+  };
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -28,24 +25,27 @@ const SignIn = () => {
       const res = await fetch('/api/auth/signin', {
         method: 'POST',
         headers: {
-          'Content-Type' : 'application/json',
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData)
       });
       const data = await res.json();
-      if(data.success === false){
+      if (data.success === false) {
         dispatch(signInFailure(data));
+        toast.error(data.message || 'Failed to sign in');
         return;
       }
       dispatch(signInSuccess(data));
+      toast.success('Signed in successfully');
       navigate('/');
     } catch (error) {
       dispatch(signInFailure(error));
+      toast.error(error.message || 'Something went wrong!');
     }
-  }
+  };
 
   return (
-    <div className="p-12 max-w-lg mx-auto my-10  rounded-lg shadow-md bg-cover bg-center" 
+    <div className="p-12 max-w-lg mx-auto my-10 rounded-lg shadow-md bg-cover bg-center" 
       style={{ backgroundImage: `url(${BACKGROUND_IMAGE_LINK})` }}>
       <h1 className="text-3xl text-center font-bold my-7">Sign In</h1>
 
@@ -75,7 +75,7 @@ const SignIn = () => {
           <span className="text-blue-400 ">Sign Up</span>
         </Link>
       </div>
-      <p className="text-red-600 mt-2 text-center">{error ? error.message || "Something went wrong!" : ""}</p>
+
     </div>
   );
 };

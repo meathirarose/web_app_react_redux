@@ -6,9 +6,17 @@ export const verifyAdmin = (req, res, next) => {
   if (!token) return next(errorHandler(401, "You are not authenticated!"));
 
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-    if (err) return next(errorHandler(403, "Token is not valid!"));
+    if (err) {      
+      if (err.name === "TokenExpiredError") {
+        return next(errorHandler(401, "Session expired, please log in again."));
+      }
+      return next(errorHandler(403, "Token is not valid!"));
+    }
 
-    if (user.isAdmin !== 1) return next(errorHandler(403, "You are not allowed to access this resource!"));
+    if (user.isAdmin !== 1)
+      return next(
+        errorHandler(403, "You are not allowed to access this resource!")
+      );
 
     req.user = user;
     next();
